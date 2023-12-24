@@ -28,8 +28,12 @@ const MainCard = forwardRef(
   ) => {
     const theme = useTheme();
 
-    // Determine boxShadow based on theme mode
     boxShadow = theme.palette.mode === 'dark' ? boxShadow || true : boxShadow;
+
+    const cardBoxShadow =
+      boxShadow && (!border || theme.palette.mode === 'dark')
+        ? shadow || theme.customShadows?.z1 || 'inherit'
+        : 'inherit';
 
     return (
       <Card
@@ -39,10 +43,13 @@ const MainCard = forwardRef(
         sx={{
           border: border ? '1px solid' : 'none',
           borderRadius: 2,
-          borderColor: theme.palette.mode === 'dark' ? theme.palette.divider : theme.palette.grey.A800,
-          boxShadow: boxShadow && (!border || theme.palette.mode === 'dark') ? shadow || theme.customShadows.z1 : 'inherit',
+          borderColor:
+            theme.palette.mode === 'dark'
+              ? theme.palette.divider
+              : theme.palette.grey.A800,
+          boxShadow: cardBoxShadow,
           ':hover': {
-            boxShadow: boxShadow ? shadow || theme.customShadows.z1 : 'inherit'
+            boxShadow: boxShadow ? cardBoxShadow : 'inherit'
           },
           '& pre': {
             m: 0,
@@ -55,9 +62,20 @@ const MainCard = forwardRef(
       >
         {/* Render card header and action if title is provided */}
         {!darkTitle && title && (
-          <CardHeader sx={headerSX} titleTypographyProps={{ variant: 'subtitle1' }} title={title} action={secondary} />
+          <CardHeader
+            sx={headerSX}
+            titleTypographyProps={{ variant: 'subtitle1' }}
+            title={title}
+            action={secondary}
+          />
         )}
-        {darkTitle && title && <CardHeader sx={headerSX} title={<Typography variant="h3">{title}</Typography>} action={secondary} />}
+        {darkTitle && title && (
+          <CardHeader
+            sx={headerSX}
+            title={<Typography variant="h3">{title}</Typography>}
+            action={secondary}
+          />
+        )}
 
         {/* Render card content or children if content is set to false */}
         {content && <CardContent sx={contentSX}>{children}</CardContent>}
@@ -66,7 +84,8 @@ const MainCard = forwardRef(
     );
   }
 );
-MainCard.displayName='MainCard';
+
+MainCard.displayName = 'MainCard';
 
 MainCard.propTypes = {
   border: PropTypes.bool,

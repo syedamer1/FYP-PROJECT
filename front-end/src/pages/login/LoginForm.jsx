@@ -1,4 +1,4 @@
-import  { useState } from 'react';
+import  { useState ,startTransition} from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -15,7 +15,6 @@ import {
   Typography
 } from '@mui/material';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
-
 
 function LoginForm () {
   const [email, setEmail] = useState('amirali@gmail.com');
@@ -45,15 +44,16 @@ function LoginForm () {
     }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      setSubmitError(null);
-      navigate('/dashboard');
-    } catch (err) {
-      setSubmitError(err.message);
-    }
-  };
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  try {
+    setSubmitError(null);
+  
+      navigate('/dashboard/');
+  } catch (err) {
+    setSubmitError(err.message);
+  }
+};
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
